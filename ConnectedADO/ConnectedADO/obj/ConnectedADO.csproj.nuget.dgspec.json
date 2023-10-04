@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\olegm\\Desktop\\IKNI\\3 year\\PIS\\lab3\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj": {}
+    "D:\\Stuff\\Work\\IT\\IKNI5SEM\\PIS\\ADO_connected\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\olegm\\Desktop\\IKNI\\3 year\\PIS\\lab3\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj": {
+    "D:\\Stuff\\Work\\IT\\IKNI5SEM\\PIS\\ADO_connected\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\olegm\\Desktop\\IKNI\\3 year\\PIS\\lab3\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj",
+        "projectUniqueName": "D:\\Stuff\\Work\\IT\\IKNI5SEM\\PIS\\ADO_connected\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj",
         "projectName": "ConnectedADO",
-        "projectPath": "C:\\Users\\olegm\\Desktop\\IKNI\\3 year\\PIS\\lab3\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj",
-        "packagesPath": "C:\\Users\\olegm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\olegm\\Desktop\\IKNI\\3 year\\PIS\\lab3\\ConnectedADO\\ConnectedADO\\obj\\",
+        "projectPath": "D:\\Stuff\\Work\\IT\\IKNI5SEM\\PIS\\ADO_connected\\ConnectedADO\\ConnectedADO\\ConnectedADO.csproj",
+        "packagesPath": "C:\\Users\\maksi\\.nuget\\packages\\",
+        "outputPath": "D:\\Stuff\\Work\\IT\\IKNI5SEM\\PIS\\ADO_connected\\ConnectedADO\\ConnectedADO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\olegm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\maksi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
