@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Configuration;
+using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Data.SqlClient;
@@ -14,8 +16,10 @@ namespace ConnectedADO
 {
     class EstablishingConnection
     {
-        public static SqlConnection con;
-        public static SqlCommand cmd;
+        public static SqlConnection? con;
+        public static SqlCommand? cmd;
+        public static Dictionary<string, SqlDataAdapter> dataAdapters = new Dictionary<string, SqlDataAdapter>();
+        public static DataSet hSet = new DataSet("Hospital");
         public EstablishingConnection()
         {
             con = new SqlConnection(ConfigurationManager.ConnectionStrings["constr"].ToString());
@@ -23,6 +27,7 @@ namespace ConnectedADO
             {
                 con.Open();
                 Console.WriteLine("З'єднання успішне\n");
+                settingAdapters();
                 con.Close();
             }
             catch (Exception ex)
@@ -31,6 +36,38 @@ namespace ConnectedADO
             }
             con.Close();
             Menu_main();
+        }
+        public static void settingAdapters()
+        {
+            SqlCommand cmd1 = con.CreateCommand();
+            cmd1.CommandType = CommandType.Text; cmd1.CommandText = "SELECT * FROM Equipment";
+            dataAdapters.Add("Equipment", new SqlDataAdapter(cmd1));
+            SqlCommandBuilder bldr1 = new SqlCommandBuilder(dataAdapters["Equipment"]);
+            bldr1.GetUpdateCommand();
+
+            SqlCommand cmd2 = con.CreateCommand();
+            cmd2.CommandType = CommandType.Text; cmd2.CommandText = "SELECT * FROM Medicine";
+            dataAdapters.Add("Medicine", new SqlDataAdapter(cmd2));
+            SqlCommandBuilder bldr2 = new SqlCommandBuilder(dataAdapters["Medicine"]);
+            bldr2.GetUpdateCommand();
+
+            SqlCommand cmd3 = con.CreateCommand();
+            cmd3.CommandType = CommandType.Text; cmd3.CommandText = "SELECT * FROM Patient";
+            dataAdapters.Add("Patient", new SqlDataAdapter(cmd3));
+            SqlCommandBuilder bldr3 = new SqlCommandBuilder(dataAdapters["Patient"]);
+            bldr3.GetUpdateCommand();
+
+            SqlCommand cmd4 = con.CreateCommand();
+            cmd4.CommandType = CommandType.Text; cmd4.CommandText = "SELECT * FROM Staff";
+            dataAdapters.Add("Staff", new SqlDataAdapter(cmd4));
+            SqlCommandBuilder bldr4 = new SqlCommandBuilder(dataAdapters["Staff"]);
+            bldr4.GetUpdateCommand();
+
+            SqlCommand cmd5 = con.CreateCommand();
+            cmd5.CommandType = CommandType.Text; cmd5.CommandText = "SELECT * FROM Proced";
+            dataAdapters.Add("Proced", new SqlDataAdapter(cmd5));
+            SqlCommandBuilder bldr5 = new SqlCommandBuilder(dataAdapters["Proced"]);
+            bldr5.GetUpdateCommand();
         }
         public static void Display(string tableName) // Функція виводу вмісту таблиці на екран
         {
@@ -63,7 +100,7 @@ namespace ConnectedADO
             switch (tableName)
             {
                 case "dbo.Equipment":
-                    string name = ""; //Оголошуємо змінні, щоб уникнути помилки 
+                    string name = ""; // Оголошуємо змінні, щоб уникнути помилки 
                     string manuf = "";
                     string command = "";
                     int rowid = 0;
@@ -71,9 +108,9 @@ namespace ConnectedADO
 
                     if(operation == "add") // Визначаємо операцію
                     {
-                        Console.WriteLine("Введіть Назву,К-сть та виробника");
+                        Console.WriteLine("Введіть Назву, К-сть та виробника");
 
-                        name = Console.ReadLine(); // Записуємо інпути користувача
+                        name = Console.ReadLine(); // Записуємо ввід користувача
                         quant = Convert.ToInt32(Console.ReadLine());
                         manuf = Console.ReadLine();
 
@@ -87,25 +124,23 @@ namespace ConnectedADO
                     }
                     if(operation == "alter")
                     {
-                        string quantInput = "";
-
                         con.Open();
 
                         Console.WriteLine("Введіть id рядка, що буде змінений");
 
                         rowid = Convert.ToInt32(Console.ReadLine());
 
-                        Console.WriteLine("Enter Name,Quantity and manufacturer");
+                        Console.WriteLine("Введіть Назву, К-сть та виробника");
 
                         name = Console.ReadLine();
-                        quantInput = Console.ReadLine();
+                        string quantInput = Console.ReadLine();
                         manuf = Console.ReadLine();
 
                         SqlCommand defaultValuesCmd = new SqlCommand("SELECT Name, Quantity, Manufacturer FROM Equipment WHERE IDeq = @rowid", con); // Витягуємо значення за замовчуванням
                         defaultValuesCmd.Parameters.AddWithValue("@rowid", rowid);
                         SqlDataReader reader = defaultValuesCmd.ExecuteReader();
 
-                        if (reader.Read()) // Якщо користувач вводить пробіл, виставляємо значення за замовчуванням
+                        if (reader.Read()) // Якщо користувач вводить пробіл або нічого, виставляємо значення за замовчуванням
                         {
                             if (string.IsNullOrWhiteSpace(name))
                                 name = reader["Name"].ToString();
@@ -257,8 +292,6 @@ namespace ConnectedADO
                     {
                         con.Open();
 
-                        string ageInput = "";
-
                         Console.WriteLine("Введіть id рядка, що буде змінений");
 
                         rowid = Convert.ToInt32(Console.ReadLine());
@@ -268,7 +301,7 @@ namespace ConnectedADO
                         surname = Console.ReadLine();
                         name = Console.ReadLine();
                         middlename = Console.ReadLine();
-                        ageInput = Console.ReadLine();
+                        string ageInput = Console.ReadLine();
                         disease = Console.ReadLine();
                         ardate = Console.ReadLine();
                         disdate = Console.ReadLine();
@@ -350,7 +383,6 @@ namespace ConnectedADO
                     }
                     if(operation == "alter")
                     {
-                        string ageInput = "";
                         age = 0;
                         con.Open();
 
@@ -361,7 +393,7 @@ namespace ConnectedADO
                         surname = Console.ReadLine();
                         name = Console.ReadLine();
                         middlename = Console.ReadLine();
-                        ageInput = Console.ReadLine();
+                        string ageInput = Console.ReadLine();
                         string position = Console.ReadLine();
 
                         SqlCommand defaultValuesCmd = new SqlCommand("SELECT Name, Last_Name, Middle_Name, Age, Position FROM Staff WHERE IDstaff = @rowid", con);
@@ -437,12 +469,6 @@ namespace ConnectedADO
                     }
                     if(operation == "alter")
                     {
-                        string patidInput = "";
-                        string equipidInput = "";
-                        string staffidInput = "";
-                        string medidInput = "";
-                        string priceInput = "";
-
                         con.Open();
 
                         Console.WriteLine("Введіть id рядка, що буде змінений");
@@ -451,12 +477,12 @@ namespace ConnectedADO
 
                         Console.WriteLine("Введіть ID пацієнта, спорядження, персоналу та ліків, назву та ціну процедури: ");
 
-                        patidInput = Console.ReadLine();
-                        equipidInput = Console.ReadLine();
-                        staffidInput = Console.ReadLine();
-                        medidInput = Console.ReadLine();
+                        string patidInput = Console.ReadLine();
+                        string equipidInput = Console.ReadLine();
+                        string staffidInput = Console.ReadLine();
+                        string medidInput = Console.ReadLine();
                         name = Console.ReadLine();
-                        priceInput = Console.ReadLine();
+                        string priceInput = Console.ReadLine();
 
                         SqlCommand defaultValuesCmd = new SqlCommand("SELECT Patient_ID, Medicine_ID, Equipment_ID, Staff_ID, Name, Price FROM Proced WHERE IDproc = @rowid", con);
                         defaultValuesCmd.Parameters.AddWithValue("@rowid", rowid);
@@ -520,7 +546,7 @@ namespace ConnectedADO
             }
                 
         }
-        public static void Menu_operations(string tableName) //меню операцій
+        public static void Menu_operations(string tableName) // Меню операцій
         {
             Console.WriteLine("Виберіть наступну операцію:\n1)Додати дані до таблиці\n2)Видалити дані з таблиці\n3)Редагувати стрічку таблиці\n4)Повернутись");
 
@@ -530,31 +556,31 @@ namespace ConnectedADO
             {
                 case "1":
                     AlterDataTables(tableName, "add"); // таблиця і "вид" операції
-
                     Console.WriteLine("Дані додані успішно");
-
                     break;
+
                 case "2":
                     AlterDataTables(tableName, "delete");
-
                     Console.WriteLine("Дані видалені успішно");
-
                     break;
+
                 case "3":
                     AlterDataTables(tableName, "alter");
-
                     Console.WriteLine("Дані змінені успішно");
-
                     break;
+
                 case "4":
                     Console.Clear();
-
                     Menu_pickTables();
+                    break;
 
+                default:
+                    Console.Clear();
+                    Console.WriteLine("Немає такої операції!");
                     break;
             }
         }
-        public static void Menu_pickTables() //Меню вибору таблиць
+        public static void Menu_pickTables() // Меню вибору таблиць
         {
             Console.WriteLine("Введіть назву таблиці\n1)dbo.Equipment \n2)dbo.Medicine \n3)dbo.Staff \n4)dbo.Patient \n5)dbo.Proced\n6)Повернутись");
 
@@ -597,27 +623,534 @@ namespace ConnectedADO
                     break;
             }
         }
-        public static int Menu_main() //Головне меню
+        public static void AlterDataTablesDS(string tableName, string operation) // Функція редагування таблиць, оперується через DataSet'и
+        {
+            string tableNameAdapter = tableName.Remove(0, 4);
+            switch (tableName)
+            {
+                case "dbo.Equipment":
+                    string name = ""; // Оголошуємо змінні, щоб уникнути помилки 
+                    string manuf = "";
+                    string command = "";
+                    int rowid = 0;
+                    int quant = 0;
+                    if (operation == "add") // Визначаємо операцію
+                    {
+                        Console.WriteLine("Введіть Назву, К-сть та виробника");
+                        name = Console.ReadLine(); // Записуємо ввід користувача
+                        quant = Convert.ToInt32(Console.ReadLine());
+                        manuf = Console.ReadLine();
+
+                        con.Open();
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter); // Заповнюємо нову таблицю датасету інформацією із адаптера цієї таблиці
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        equipmentTable.Rows.Add(0, name, quant, manuf); // Створюємо новий рядок у цій таблиці
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter); // Синхронізуємо інформацію датасету із БД
+                        con.Close();
+
+                        hSet.Clear(); // Очищаємо датасет для подальших операцій з ним
+                    }
+                    if (operation == "alter")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде змінений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Введіть Назву, К-сть та виробника");
+                        name = Console.ReadLine();
+                        string quantString = Console.ReadLine();
+                        manuf = Console.ReadLine();
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var updRow = equipmentTable.Select($"IDeq={rowid}")[0]; // Витягуємо рядок, який потрібно модифікувати
+                        if (!string.IsNullOrWhiteSpace(name)) // Записуємо зміни в рядок, якщо ввід не є пустим або пробілом
+                            updRow["Name"] = name;
+                        if (!string.IsNullOrWhiteSpace(quantString))
+                            updRow["Quantity"] = Convert.ToInt32(quantString);
+                        if (!string.IsNullOrWhiteSpace(manuf))
+                            updRow["Manufacturer"] = manuf;
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "delete")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде видалений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var delRow = equipmentTable.Select($"IDeq={rowid}")[0]; // Витягуємо рядок, який потрібно видалити
+                        delRow.Delete(); // Видаляємо рядок з датасету
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    break;
+                case "dbo.Medicine":
+                    string crdate = "";
+                    string expdate = "";
+                    if (operation == "add")
+                    {
+                        Console.WriteLine("Введіть Назву, Виробника і Дати виготовлення/Термін придатності у форматі рік-місяць-число ");
+                        name = Console.ReadLine();
+                        manuf = Console.ReadLine();
+                        crdate = Console.ReadLine();
+                        expdate = Console.ReadLine();
+
+                        con.Open();
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        equipmentTable.Rows.Add(0, name, manuf, crdate, expdate);
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "alter")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде змінений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Введіть Назву, Виробника і Дати виготовлення/Термін придатності у форматі рік-місяць-число ");
+                        name = Console.ReadLine();
+                        manuf = Console.ReadLine();
+                        crdate = Console.ReadLine();
+                        expdate = Console.ReadLine();
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var updRow = equipmentTable.Select($"IDmed={rowid}")[0];
+                        if (!string.IsNullOrWhiteSpace(name))
+                            updRow["Name"] = name;
+                        if (!string.IsNullOrWhiteSpace(manuf))
+                            updRow["Producer"] = manuf;
+                        if (!string.IsNullOrWhiteSpace(crdate))
+                            updRow["Created_Date"] = crdate;
+                        if (!string.IsNullOrWhiteSpace(expdate))
+                            updRow["Expiration_Date"] = expdate;
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "delete")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде видалений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var delRow = equipmentTable.Select($"IDmed={rowid}")[0];
+                        delRow.Delete();
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    break;
+                case "dbo.Patient":
+                    string surname = "";
+                    string middlename = "";
+                    int age = 0;
+                    string disease = "";
+                    string ardate = "";
+                    string disdate = "";
+                    string ward = "";
+                    if (operation == "add")
+                    {
+                        Console.WriteLine("Введіть ПІБ, Вік, Хворобу, Дати прибуття/виписки у форматі рік-місяць-число, а також відділення ");
+                        surname = Console.ReadLine();
+                        name = Console.ReadLine();
+                        middlename = Console.ReadLine();
+                        age = Convert.ToInt32(Console.ReadLine());
+                        disease = Console.ReadLine();
+                        ardate = Console.ReadLine();
+                        disdate = Console.ReadLine();
+                        ward = Console.ReadLine();
+
+                        string[] temp1 = ardate.Split("-");
+
+
+                        con.Open();
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        if (disdate == "")
+                        {
+                            equipmentTable.Rows.Add(0, surname, name, middlename, age, disease,
+                                ardate, DBNull.Value, ward);
+                            dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                            con.Close();
+                            hSet.Clear();
+                            break;
+                        }
+
+                        string[] temp2 = disdate.Split("-");
+                        equipmentTable.Rows.Add(0, surname, name, middlename, age, disease, ardate, disdate, ward);
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "alter")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде змінений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Введіть ПІБ, Вік, Хворобу, Дати прибуття/виписки у форматі рік-місяць-число, а також відділення ");
+                        surname = Console.ReadLine();
+                        name = Console.ReadLine();
+                        middlename = Console.ReadLine();
+                        string ageString = Console.ReadLine();
+                        disease = Console.ReadLine();
+                        ardate = Console.ReadLine();
+                        disdate = Console.ReadLine();
+                        ward = Console.ReadLine();
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var updRow = equipmentTable.Select($"IDpat={rowid}")[0];
+                        if (!string.IsNullOrWhiteSpace(name))
+                            updRow["First_name"] = name;
+                        if (!string.IsNullOrWhiteSpace(surname))
+                            updRow["Last_name"] = surname;
+                        if (!string.IsNullOrWhiteSpace(middlename))
+                            updRow["Middle_name"] = middlename;
+                        if (!string.IsNullOrWhiteSpace(ageString))
+                            updRow["Age"] = ageString;
+                        if (!string.IsNullOrWhiteSpace(disease))
+                            updRow["Disease"] = disease;
+                        if (!string.IsNullOrWhiteSpace(ardate))
+                            updRow["Arrival_date"] = ardate;
+                        if (!string.IsNullOrWhiteSpace(disdate))
+                            updRow["Discharge_date"] = disdate;
+                        if (!string.IsNullOrWhiteSpace(ward))
+                            updRow["Ward"] = ward;
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "delete")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде видалений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var delRow = equipmentTable.Select($"IDpat={rowid}")[0];
+                        delRow.Delete();
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    break;
+                case "dbo.Staff":
+                    if (operation == "add")
+                    {
+                        Console.WriteLine("Введіть ПІБ, Вік і Посаду ");
+                        surname = Console.ReadLine();
+                        name = Console.ReadLine();
+                        middlename = Console.ReadLine();
+                        age = Convert.ToInt32(Console.ReadLine());
+                        string position = Console.ReadLine();
+
+                        con.Open();
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        equipmentTable.Rows.Add(0, name, surname, middlename, age, position);
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "alter")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде змінений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Введіть ПІБ, Вік і Посаду ");
+                        surname = Console.ReadLine();
+                        name = Console.ReadLine();
+                        middlename = Console.ReadLine();
+                        string ageString = Console.ReadLine();
+                        string position = Console.ReadLine();
+
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var updRow = equipmentTable.Select($"IDstaff={rowid}")[0];
+                        if (!string.IsNullOrWhiteSpace(name))
+                            updRow["Name"] = name;
+                        if (!string.IsNullOrWhiteSpace(surname))
+                            updRow["Last_name"] = surname;
+                        if (!string.IsNullOrWhiteSpace(middlename))
+                            updRow["Middle_name"] = middlename;
+                        if (!string.IsNullOrWhiteSpace(ageString))
+                            updRow["Age"] = ageString;
+                        if (!string.IsNullOrWhiteSpace(position))
+                            updRow["Position"] = position;
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "delete")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде видалений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var delRow = equipmentTable.Select($"IDstaff={rowid}")[0];
+                        delRow.Delete();
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    break;
+                case "dbo.Proced":
+                    int patid = 0;
+                    int equipid = 0;
+                    int staffid = 0;
+                    int medid = 0;
+                    int price = 0;
+                    if (operation == "add")
+                    {
+                        Console.WriteLine("Введіть ID пацієнта, спорядження, персоналу та ліків, назву та ціну процедури: ");
+                        patid = Convert.ToInt32(Console.ReadLine());
+                        equipid = Convert.ToInt32(Console.ReadLine());
+                        staffid = Convert.ToInt32(Console.ReadLine());
+                        medid = Convert.ToInt32(Console.ReadLine());
+                        name = Console.ReadLine();
+                        price = Convert.ToInt32(Console.ReadLine());
+
+                        con.Open();
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        equipmentTable.Rows.Add(0, patid, equipid, staffid, medid, name, price);
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "alter")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде змінений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Введіть ID пацієнта, спорядження, персоналу та ліків, назву та ціну процедури: ");
+                        string patidString = Console.ReadLine();
+                        string equipidString = Console.ReadLine();
+                        string staffidString = Console.ReadLine();
+                        string medidString = Console.ReadLine();
+                        name = Console.ReadLine();
+                        string priceString = Console.ReadLine();
+
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var updRow = equipmentTable.Select($"IDproc={rowid}")[0];
+                        if (!string.IsNullOrWhiteSpace(patidString))
+                            updRow["Patient_ID"] = patidString;
+                        if (!string.IsNullOrWhiteSpace(equipidString))
+                            updRow["Equipment_ID"] = equipidString;
+                        if (!string.IsNullOrWhiteSpace(staffidString))
+                            updRow["Staff_ID"] = staffidString;
+                        if (!string.IsNullOrWhiteSpace(medidString))
+                            updRow["Medicine_ID"] = medidString;
+                        if (!string.IsNullOrWhiteSpace(name))
+                            updRow["Name"] = name;
+                        if (!string.IsNullOrWhiteSpace(priceString))
+                            updRow["Price"] = priceString;
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    if (operation == "delete")
+                    {
+                        Console.WriteLine("Введіть id рядка, що буде видалений");
+                        rowid = Convert.ToInt32(Console.ReadLine());
+
+                        con.Open();
+
+                        dataAdapters[tableNameAdapter].Fill(hSet, tableNameAdapter);
+
+                        var equipmentTable = hSet.Tables[tableNameAdapter];
+
+                        var delRow = equipmentTable.Select($"IDproc={rowid}")[0];
+                        delRow.Delete();
+
+                        dataAdapters[tableNameAdapter].Update(hSet, tableNameAdapter);
+
+                        con.Close();
+
+                        hSet.Clear();
+                    }
+                    break;
+                default: Console.Clear(); Console.WriteLine("Такої таблиці не існує!"); break;
+            }
+
+        }
+        public static void Menu_operationsDS(string tableName) // Меню операцій, оперується через DataSet'и
+        {
+            Console.WriteLine("Виберіть наступну операцію:\n1)Додати дані до таблиці\n2)Видалити дані з таблиці\n3)Редагувати стрічку таблиці\n4)Повернутись");
+            string a = Console.ReadLine();
+            switch (a)
+            {
+                case "1":
+                    AlterDataTablesDS(tableName, "add");
+                    Console.WriteLine("Дані додані успішно");
+                    break;
+
+                case "2":
+                    AlterDataTablesDS(tableName, "delete");
+                    Console.WriteLine("Дані видалені успішно");
+                    break;
+
+                case "3":
+                    AlterDataTablesDS(tableName, "alter");
+                    Console.WriteLine("Дані змінені успішно");
+                    break;
+
+                case "4":
+                    Console.Clear();
+                    Menu_pickTablesDS();
+                    break;
+
+                default:
+                    Console.Clear();
+                    Console.WriteLine("Немає такої операції!");
+                    break;
+            }
+        }
+        public static void Menu_pickTablesDS() // Меню вибору таблиць, оперується через DataSet'и
+        {
+            Console.Clear();
+            Console.WriteLine("Введіть назву таблиці\n1)dbo.Equipment \n2)dbo.Medicine \n3)dbo.Staff \n4)dbo.Patient \n5)dbo.Proced\n6)Повернутись");
+            string tableName = Console.ReadLine();
+            Console.Clear();
+            switch (tableName)
+            {
+                case "1":
+                    tableName = "dbo.Equipment";
+                    Display("Equipment");
+                    Menu_operationsDS(tableName);
+                    break;
+
+                case "2":
+                    tableName = "dbo.Medicine";
+                    Display("Medicine");
+                    Menu_operationsDS(tableName);
+                    break;
+
+                case "3":
+                    tableName = "dbo.Staff";
+                    Display("Staff");
+                    Menu_operationsDS(tableName);
+                    break;
+
+                case "4":
+                    tableName = "dbo.Patient";
+                    Display("Patient");
+                    Menu_operationsDS(tableName);
+                    break;
+
+                case "5":
+                    tableName = "dbo.Proced";
+                    Display("Proced");
+                    Menu_operationsDS(tableName);
+                    break;
+
+                case "6":
+                    Console.Clear();
+                    Menu_main();
+                    break;
+
+                default:
+                    Console.Clear();
+                    Console.WriteLine("No such choice");
+                    break;
+            }
+        }
+        public static int Menu_main() // Головне меню
         {
             bool men = true;
             while(men = true)
             {
-                Console.WriteLine("1)Вивести таблиці\n2)Вихід");
+                Console.WriteLine("1)Робота з таблицями\n2)Робота з таблицями (DataSet)\n3)Вихід");
                 string choice = Console.ReadLine();
                 switch (choice)
                 {
                     case "1":
-                        Display("Equipment");
-                        Display("Medicine");
-                        Display("Staff");
-                        Display("Patient");
-                        Display("Proced");
+                        Console.Clear();
                         Menu_pickTables();
                         break;
+
                     case "2":
-                        return 0;
+                        Console.Clear();
+                        Menu_pickTablesDS();
                         break;
-                    default: Console.WriteLine("No such choice"); Console.Clear(); break; 
+
+                    case "3":
+                        return 0;
+
+                    default: 
+                        Console.WriteLine("No such choice"); 
+                        Console.Clear(); 
+                        break; 
                 }
             }
             return -1;
@@ -628,7 +1161,7 @@ namespace ConnectedADO
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.InputEncoding = System.Text.Encoding.Unicode; //Команди для коректного відображення кирилиці
+            Console.InputEncoding = System.Text.Encoding.Unicode; // Команди для коректного відображення кирилиці
             EstablishingConnection A = new EstablishingConnection(); // ініціалізація класу
         }
     }

@@ -31,3 +31,36 @@ C:\Users\olegm\Desktop\IKNI\3 year\PIS\lab3\ConnectedADO\ConnectedADO\obj\Debug\
 C:\Users\olegm\Desktop\IKNI\3 year\PIS\lab3\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.pdb
 C:\Users\olegm\Desktop\IKNI\3 year\PIS\lab3\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.genruntimeconfig.cache
 C:\Users\olegm\Desktop\IKNI\3 year\PIS\lab3\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ref\ConnectedADO.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.exe
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.dll.config
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.deps.json
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.runtimeconfig.json
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\ConnectedADO.pdb
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Data.SqlClient.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Drawing.Common.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Security.Permissions.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.csproj.AssemblyReference.cache
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.GeneratedMSBuildEditorConfig.editorconfig
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.AssemblyInfoInputs.cache
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.AssemblyInfo.cs
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.csproj.CoreCompileInputs.cache
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.csproj.CopyComplete
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\refint\ConnectedADO.dll
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.pdb
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ConnectedADO.genruntimeconfig.cache
+D:\Stuff\Work\IT\IKNI5SEM\PIS\ADO_connected\ConnectedADO\ConnectedADO\obj\Debug\net6.0\ref\ConnectedADO.dll
