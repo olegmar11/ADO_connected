@@ -111,6 +111,7 @@ namespace ConnectedADO
                                 name = reader["Name"].ToString();
                             if (string.IsNullOrWhiteSpace(quantInput))
                                 quant = Convert.ToInt32(reader["Quantity"]);
+                            else quant = Convert.ToInt32(quantInput);
                             if (string.IsNullOrWhiteSpace(manuf))
                                 manuf = reader["Manufacturer"].ToString();
                         }
@@ -277,7 +278,7 @@ namespace ConnectedADO
 
                         ward = Console.ReadLine();
 
-                        SqlCommand defaultValuesCmd = new SqlCommand("SELECT First_Name, Last_Name, Middle_Name, Age, Disease, Arrival_Date, Discharge_Date FROM Patient WHERE IDpat = @rowid", con);
+                        SqlCommand defaultValuesCmd = new SqlCommand("SELECT First_Name, Last_Name, Middle_Name, Age, Disease, Arrival_Date, Discharge_Date, Ward FROM Patient WHERE IDpat = @rowid", con);
 
                         defaultValuesCmd.Parameters.AddWithValue("@rowid", rowid);
 
@@ -286,27 +287,27 @@ namespace ConnectedADO
                         if (reader.Read())
                         {
                             if (string.IsNullOrWhiteSpace(name))
-                                name = reader["First_Name"].ToString();
+                                name = reader["First_name"].ToString();
                             if (string.IsNullOrWhiteSpace(surname))
-                                surname = reader["Last_Name"].ToString();
+                                surname = reader["Last_name"].ToString();
                             if (string.IsNullOrWhiteSpace(middlename))
-                                middlename = reader["Middle_Name"].ToString();
+                                middlename = reader["Middle_name"].ToString();
                             if (string.IsNullOrWhiteSpace(ageInput))
                                 age = Convert.ToInt32(reader["Age"]);
                             if (string.IsNullOrWhiteSpace(disease))
                                 disease = reader["Disease"].ToString();
                             if (string.IsNullOrWhiteSpace(ardate))
-                                ardate = reader["Arrival_Date"].ToString();
+                                ardate = reader["Arrival_date"].ToString();
                             if (string.IsNullOrWhiteSpace(disdate))
-                                disease = reader["Dispcharge_Date"].ToString();
+                                disease = reader["Dispcharge_date"].ToString();
                             if (string.IsNullOrWhiteSpace(ward))
                                 ward = reader["Ward"].ToString();
                         }
 
                         reader.Close();
 
-                        command = string.Format("update " + tableName + "SET Last_name = N'{0}', First_Name = N'{1}', Middle_Name = N'{2}', Age = {3}, Disease = '{4}'" +
-                            ", Arrival_Date = '{5}, Discharge_Date = '{6}', Ward = '{7}' where IDpat = {8};",surname,name,middlename,age,disease,ardate,disdate,rowid);
+                        command = string.Format("update Patient SET Last_name = N'{0}', First_name = N'{1}', Middle_name = N'{2}', Age = {3}, Disease = N'{4}'" +
+                            ", Arrival_date = '{5}', Discharge_date = '{6}', Ward = N'{7}' where IDpat = {8};",surname,name,middlename,age,disease,ardate,disdate,ward,rowid);
 
                         cmd = new SqlCommand(command, con);
                         cmd.ExecuteNonQuery();
@@ -350,7 +351,7 @@ namespace ConnectedADO
                     if(operation == "alter")
                     {
                         string ageInput = "";
-
+                        age = 0;
                         con.Open();
 
                         Console.WriteLine("Введіть id рядка, що буде змінений");
@@ -360,10 +361,10 @@ namespace ConnectedADO
                         surname = Console.ReadLine();
                         name = Console.ReadLine();
                         middlename = Console.ReadLine();
-                        age = Convert.ToInt32(Console.ReadLine());
+                        ageInput = Console.ReadLine();
                         string position = Console.ReadLine();
 
-                        SqlCommand defaultValuesCmd = new SqlCommand("SELECT First_Name, Last_Name, Middle_Name, Age, Position FROM Staff WHERE IDstaff = @rowid", con);
+                        SqlCommand defaultValuesCmd = new SqlCommand("SELECT Name, Last_Name, Middle_Name, Age, Position FROM Staff WHERE IDstaff = @rowid", con);
 
                         defaultValuesCmd.Parameters.AddWithValue("@rowid", rowid);
 
@@ -372,7 +373,7 @@ namespace ConnectedADO
                         if (reader.Read())
                         {
                             if (string.IsNullOrWhiteSpace(name))
-                                name = reader["First_Name"].ToString();
+                                name = reader["Name"].ToString();
                             if (string.IsNullOrWhiteSpace(surname))
                                 surname = reader["Last_Name"].ToString();
                             if (string.IsNullOrWhiteSpace(middlename))
@@ -385,7 +386,7 @@ namespace ConnectedADO
                         }
                         reader.Close();
 
-                        command = string.Format("update " + tableName + "Set Last_Name = N'{0}', First_Name = N'{1}', Middle_Name = N'{2}', Age = {3}, Position = N'{4}';", surname, name, middlename, age, position,rowid);
+                        command = string.Format("update Staff Set Last_Name = N'{0}', Name = N'{1}', Middle_Name = N'{2}', Age = {3}, Position = N'{4}' where IDstaff = {5};", surname, name, middlename, age, position,rowid);
                         
                         cmd = new SqlCommand(command, con);
                         cmd.ExecuteNonQuery();
